@@ -397,6 +397,9 @@ constructor(private camera: Camera) {}
 similar to what i have done if using just the two options of gallery and camera.
 
 ```
+public myProfileImage;
+
+
 async selectImageSource() {
     const cameraOptions: CameraOptions = {
       quality: 100,
@@ -453,6 +456,92 @@ async selectImageSource() {
 * targetHeight: it's the height of the placeholder you have already defined to hold the image 
   in your html page. That is the image height you defined for the photo.
 * mediaType is the type of file you intend using. either PICTURE, VIDEO or ALLMEDIA
+
+* Then in my __tab3.page.html__ page, i have a default image which i have to change dynamically.
+
+```
+<ion-avatar (click)="selectImageSource()" class="profile-pix">
+  <ion-img src="https://tse2.mm.bing.net/th?id=OIP.Lqo6-5-nWEcsQv-N06HPGAHaFk&pid=Api&P=0&w=227&h=172"></ion-img>
+</ion-avatar>
+```
+The image above is by default, so i will change it dynamically and bind it to myProfileImage
+as shown below:
+
+```
+<ion-avatar (click)="selectImageSource()" class="profile-pix">
+  <ion-img [src]="myProfileImage"></ion-img>
+</ion-avatar>
+```
+
+## Using firebase with Ionic
+
+* Install firebase using the following command
+
+```
+npm install firebase @angular/fire --save
+```
+* Visit [Firebase google](https://firebase.google.com)
+* Click on __signin__.
+> You must have a google accout to use firebase e.g a Gmail account.
+* Once you're logged in, click __Go to console__.
+* Click __Add Project__ to add a project.
+* Add your project name and check the conditions checkbox at the bottom of the page.
+**NOTE**: You also have the options to change your location and project ID
+* Click on __Create Project__.
+> You also have the option here of using __Google Analytics__. Here i won't be using it.
+* Click **Continue__ to complete project creation.
+ You can refresh your browser if the screen doesn't give you a side menu. And then you can
+ click on the project Name you created earlier.
+
+* To connect your application to firebase, Click on __web__. It is represented by the 
+symbol </> at the righthand side of the firebase window.
+* Add a nickname to your project in the box provided for it.
+* Click __Register App__.
+* You will see a screen with some outputs similar to this.
+You will need to copy the object.
+```
+{
+    apiKey: "sdtyfguihjlk;kjhgfcxdfgchjhbkl",
+    authDomain: "projectName.firebaseapp.com",
+    databaseURL: "https://projectname.firebaseio.com",
+    projectId: "projectName",
+    storageBucket: "projectName.appspot.com",
+    messagingSenderId: "345678909876",
+    appId: "3: 23456789009876543"
+  };
+```
+* Open your project, go to **environments** file. Open **environment.ts**
+Then after the production property, paste your firebase object with the property
+name as __firebase__. Below is a sample of it.
+
+```
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: "sdtyfguihjlk;kjhgfcxdfgchjhbkl",
+    authDomain: "projectName.firebaseapp.com",
+    databaseURL: "https://projectname.firebaseio.com",
+    projectId: "projectName",
+    storageBucket: "projectName.appspot.com",
+    messagingSenderId: "345678909876",
+    appId: "3: 23456789009876543"
+  } 
+};
+```
+* Then open your app.module.ts and import __AngularFireModule__ as follows:
+Also add it inside the imports options.
+Also import the environments file that contains the firebase object.
+
+```
+import { AngularFireModule} from "@angular/fire";
+import { environment } from "../environments/environment";
+
+imports: [
+  AngularFireModule.initializeApp(environment.firebase)
+]
+```
+NOTE: I passed the object stored in __environment__ as a property to the __AngularFireModule__.
+
 
 ## Sharing Your app On social Media
 > Note, am using the community edition and you can get it with this link below.
