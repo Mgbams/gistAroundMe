@@ -114,7 +114,7 @@ In my Case, this
 }
 ```
 **Becomes**
- 
+
 ```
 {
     path: 'activity-detail/:activityID',
@@ -453,3 +453,62 @@ async selectImageSource() {
 * targetHeight: it's the height of the placeholder you have already defined to hold the image 
   in your html page. That is the image height you defined for the photo.
 * mediaType is the type of file you intend using. either PICTURE, VIDEO or ALLMEDIA
+
+## Sharing Your app On social Media
+> Note, am using the community edition and you can get it with this link below.
+ The usage is similar to taht of a camera.
+
+* Visit [Ionic Framework](https://ionicframework.com/docs/native/social-sharing)
+* Copy this code and execute it on your project terminal
+
+```
+$ ionic cordova plugin add cordova-plugin-x-socialsharing
+$ npm install @ionic-native/social-sharing
+```
+* Then go to app.module.ts and import **SocialSharing** as shown below.
+Also add **SocialSharing** as a provider in app.module.ts.
+
+```
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
+providers: [
+  SocialSharing
+]
+```
+**NOTE**: For a complete documentation of socialsharing, you can visit the below
+official github documentation
+[GITHUB-SocialSharing]( https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin)
+
+* In the html page where the share button is located, in my case it's
+__activity-detail.page.html__, add a click event to the button and give it a function e.g
+
+```
+<ion-fab-button (click)="share()">
+  <ion-icon color="dark" name="share"></ion-icon>
+</ion-fab-button>
+```
+* Then in the typescript page that controls the share button in my case __activity-detail.page.ts_, you can do the following:
+
+```
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
+constructor(private socialShare: SocialSharing) {}
+
+share() {
+  this.activityDetail.subscribe((activity) => {
+    this.socialShare.share("Look what i found on kingsley's app", activity.name, "", activity.cropped )
+  })
+}
+```
+
+**EXPLANATION**: 
+* The first parameter of the share() method is the message we want others to see.
+* The second parameter is the __subject__ which we can leave as blank i.e "". from the above code,
+  i passed in the name of our activity as the subject.
+* The third parameter is for file, that is if we are willing to send a file during the share.
+ We can also leave it as blank i.e "" in cases where we are not sending files.
+* the fourth parameter is for url for specicific resources like image url e.t.c. Note, from
+the above code, i passed in the url of my image since i wished for the image to be shared.
+
+
+
