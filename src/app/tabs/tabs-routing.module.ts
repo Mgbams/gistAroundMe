@@ -1,3 +1,4 @@
+import { CanEnterTabsPageGuard } from './../can-enter-tabs-page.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
@@ -6,6 +7,7 @@ const routes: Routes = [
   {
     path: 'tabs',
     component: TabsPage,
+    canActivate: [CanEnterTabsPageGuard],
     children: [
       {
         path: 'tab1',
