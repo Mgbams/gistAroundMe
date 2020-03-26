@@ -543,6 +543,70 @@ imports: [
 NOTE: I passed the object stored in __environment__ as a property to the __AngularFireModule__.
 
 
+##  Making authentication of a login page with firebase
+* Generate your login page using
+```
+ionic g page login
+```
+* In the login.page.html, add your input fields for email and password 
+* in app.module.ts, import the AngularFireAuthModule. Make sure the below
+three imports are in your app.module.ts. Note that the environment imported
+contains the settings of your firebase account
+
+```
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
+```
+
+* Under the imports tab of your app.module.ts, make sure to add the below two lines.
+
+```
+AngularFireModule.initializeApp(environment.firebase),
+AngularFireAuthModule,
+```
+* Generate a login service that will handle the logic
+```
+ionic g service login
+```
+* in the constructor of the login.service.ts, inject AngularFireAuth e.g
+is shown below
+```
+constructor(private angularFireAuth: AngularFireAuth) { }
+```
+* create a function in the login.service.ts that will handle your logic.
+You can access the inbuilt validation methods as follows
+```
+this.angularFireAuth.auth.theDesiredMethodName
+```
+* After setting up your method, go to your firebase account
+* Click on __Authentication__
+* Click on __setup sign-in method__
+* Select the choice of sign-in you want to permit and enable it
+* Save your modifications
+* You can also click the __users__ tab if you need create a user using firebase.
+
+## Generating an angular Guard
+* In the project terminal, type
+```
+ionic generate guard enterYourGuardNameHere
+```
+* Press the __space__ tab on the keyboard to select __CanActivate__ option.
+* Go to __app-routing-module.ts__ and in the routing of the login page, make sure
+to add the function you created in the guard. e.g you would have a logi routing that
+looks as below:
+```
+ {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
+    canActivate: [CanEnterLoginPageGuard]
+  }
+```
+Notice i added the __canActivate__ that i created in my guard and then i added the guard name i.e
+__CanEnterLoginPageGuard__.
+
+
+
 ## Sharing Your app On social Media
 > Note, am using the community edition and you can get it with this link below.
  The usage is similar to taht of a camera.
@@ -598,6 +662,14 @@ share() {
  We can also leave it as blank i.e "" in cases where we are not sending files.
 * the fourth parameter is for url for specicific resources like image url e.t.c. Note, from
 the above code, i passed in the url of my image since i wished for the image to be shared.
+
+**NOTE**: To troubleshoot an error message similar to the one below:
+"ERROR TypeError: this.loginService.login is not a function",
+You only need to reopen your project server. In my case i typed
+```
+ionic serve
+```
+and it reopened my server. It could be __npm start__ for others.
 
 
 
